@@ -21,7 +21,7 @@ export default class EarthquakeMap extends Component {
 
       const mapConfig = Object.assign({}, {
         center: {lat: quake.geometry.coordinates[1], lng: quake.geometry.coordinates[0]},
-        zoom: 10,
+        zoom: 7,
         gestureHandling: "cooperative",
         mapTypeId: 'roadmap'
       })
