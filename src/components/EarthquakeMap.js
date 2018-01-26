@@ -61,11 +61,6 @@ export default class EarthquakeMap extends Component {
   }
 
   render() {
-    const style = {
-      width: '60vw',
-      height: '60vh'
-    }
-
     return (
       <div className="mapView" ref="map">
         loading map...
