@@ -3,6 +3,8 @@ import { Component }  from 'react';
 import AppBar         from 'material-ui/AppBar';
 import FlatButton     from 'material-ui/FlatButton';
 import EarthquakeList from './EarthquakeList';
+import { getQuakes }  from '../services/earthquakes';
+import { getCity   }  from '../services/earthquakes';
 import SelectField    from 'material-ui/SelectField';
 import MenuItem       from 'material-ui/MenuItem';
 import SearchBar      from 'material-ui-search-bar'
@@ -19,25 +21,23 @@ class Home extends Component {
       city: "Tokyo, Japan"
     }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handler      = this.handler.bind(this);
     this.searchCity   = this.searchCity.bind(this);
+    this.fetchAPI     = this.fetchAPI.bind(this);
   }
 
   componentWillMount() {
     this.fetchAPI({});
   }
 
-  handleChange(event, index, value) {
-    if (value < 10) { this.fetchAPI({rad: this.state.radius}) };
-    if (value > 10) { this.fetchAPI({mag: this.state.magnitude}) };
+  handler(event, index, value) {
+    if (value < 10) { this.fetchAPI({mag: value}) };
+    if (value > 10) { this.fetchAPI({rad: value}) };
   }
 
   searchCity() {
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.state.city}&key=${process.env.REACT_APP_GOOGLE_KEY}`)
-    .then(res => res.json())
-    .then(json => json.results[0])
-    .then(results =>
-      this.setState({
+    getCity(this.state.city)
+    .then(results => this.setState({
         lon: results.geometry.location.lng,
         lat: results.geometry.location.lat,
         city: results.formatted_address
@@ -55,12 +55,12 @@ class Home extends Component {
     const rad = query.rad || this.state.radius;
     const lat = query.lat || this.state.lat;
     const lon = query.lon || this.state.lon;
-    const one_week = 604800000;
-    const today = new Date();
-    const one_week_ago = new Date(today - one_week);
-    fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${one_week_ago.toDateString()}&latitude=${lat}&longitude=${lon}&maxradiuskm=${rad}&minmagnitude=${mag}`)
-    .then(res => res.json())
-    .then(json => this.setState({earthquakes: json.features.slice(0,7), radius: rad, magnitude: mag}))
+    getQuakes({mag: mag, rad: rad, lat: lat, lon: lon})
+    .then(json => this.setState({
+      earthquakes: json.features.slice(0,7),
+      radius: rad,
+      magnitude: mag
+    }))
   }
 
   render() {
@@ -84,7 +84,7 @@ class Home extends Component {
           className="select-field"
           floatingLabelText="Radius"
           value={this.state.radius}
-          onChange={this.handleChange}
+          onChange={this.handler}
           autoWidth={true}
         >
           <MenuItem value={50} primaryText="50 KM" />
@@ -100,7 +100,7 @@ class Home extends Component {
           className="select-field"
           floatingLabelText="Magnitude"
           value={this.state.magnitude}
-          onChange={this.handleChange}
+          onChange={this.handler}
           autoWidth={true}
         >
           <MenuItem value={2} primaryText="mag 2+" />
@@ -110,6 +110,7 @@ class Home extends Component {
           <MenuItem value={6} primaryText="mag 6+" />
           <MenuItem value={7} primaryText="mag 7+" />
         </SelectField>
+
         <h2>({this.state.earthquakes.length}) earthquakes near {this.state.city}</h2>
         <EarthquakeList list={this.state.earthquakes}/>
       </div>
