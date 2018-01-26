@@ -5,6 +5,7 @@ import FlatButton     from 'material-ui/FlatButton';
 import EarthquakeList from './EarthquakeList';
 import SelectField    from 'material-ui/SelectField';
 import MenuItem       from 'material-ui/MenuItem';
+import SearchBar      from 'material-ui-search-bar'
 
 class Home extends Component {
   constructor(props) {
@@ -12,32 +13,54 @@ class Home extends Component {
     this.state = {
       earthquakes: [],
       radius: 2000,
-      magnitude: 2
+      magnitude: 2,
+      lon: 139,
+      lat: 35,
+      city: "Tokyo, Japan"
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.searchCity   = this.searchCity.bind(this);
   }
 
   componentWillMount() {
-    this.fetchAPI(2, 2000);
+    this.fetchAPI({});
   }
 
   handleChange(event, index, value) {
-    if (value < 10) { this.fetchAPI(value, this.state.radius) };
-    if (value > 10) { this.fetchAPI(this.state.magnitude, value) };
+    if (value < 10) { this.fetchAPI({rad: this.state.radius}) };
+    if (value > 10) { this.fetchAPI({mag: this.state.magnitude}) };
   }
 
-  fetchAPI(mag, rad) {
+  searchCity() {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.state.city}&key=${process.env.REACT_APP_GOOGLE_KEY}`)
+    .then(res => res.json())
+    .then(json => json.results[0])
+    .then(results =>
+      this.setState({
+        lon: results.geometry.location.lng,
+        lat: results.geometry.location.lat,
+        city: results.formatted_address
+      }, () => {
+        this.fetchAPI({
+          lat: results.geometry.location.lat,
+          lon: results.geometry.location.lng
+        })
+      })
+    )
+  }
+
+  fetchAPI(query) {
+    const mag = query.mag || this.state.magnitude;
+    const rad = query.rad || this.state.radius;
+    const lat = query.lat || this.state.lat;
+    const lon = query.lon || this.state.lon;
     const one_week = 604800000;
     const today = new Date();
     const one_week_ago = new Date(today - one_week);
-    const day = one_week_ago.getDate();
-    const month = one_week_ago.getMonth() + 1;
-    const year = one_week_ago.getFullYear();
-    fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${year}-${month}-${day}&latitude=35&longitude=139&maxradiuskm=${rad}&minmagnitude=${mag}`)
+    fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${one_week_ago.toDateString()}&latitude=${lat}&longitude=${lon}&maxradiuskm=${rad}&minmagnitude=${mag}`)
     .then(res => res.json())
-    .then(json => Object.values(json)[2])
-    .then(earth_obj => this.setState({earthquakes: earth_obj, radius: rad, magnitude: mag}))
+    .then(json => this.setState({earthquakes: json.features.slice(0,7), radius: rad, magnitude: mag}))
   }
 
   render() {
@@ -48,6 +71,13 @@ class Home extends Component {
           style={{ backgroundColor: '#0aadd1' }}
           showMenuIconButton={false}
           iconElementRight={<FlatButton label="Account" />}
+        />
+
+        <SearchBar
+          ref="search"
+          onChange={(val) => this.setState({ city: val })}
+          onRequestSearch={ this.searchCity }
+          hintText="Search City: Tokyo, Berlin..."
         />
 
         <SelectField
@@ -80,6 +110,7 @@ class Home extends Component {
           <MenuItem value={6} primaryText="mag 6+" />
           <MenuItem value={7} primaryText="mag 7+" />
         </SelectField>
+        <h2>({this.state.earthquakes.length}) earthquakes near {this.state.city}</h2>
         <EarthquakeList list={this.state.earthquakes}/>
       </div>
     )
