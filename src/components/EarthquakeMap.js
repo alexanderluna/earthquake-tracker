@@ -5,9 +5,7 @@ import flag from '../flag.png'
 
 export default class EarthquakeMap extends Component {
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.google !== this.props.google || prevProps.quake !== this.props.quake) {
-      this.loadMap();
-    }
+    this.loadMap();
   }
 
   loadMap() {

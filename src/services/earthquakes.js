@@ -12,3 +12,8 @@ export function getCity(city) {
   .then(res => res.json())
   .then(json => json.results[0])
 }
+
+export function findQuake(id) {
+  return fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid=${id}`)
+  .then(res => res.json())
+}

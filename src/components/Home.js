@@ -1,12 +1,9 @@
 import React                   from 'react';
 import { Component }           from 'react';
-import AppBar                  from 'material-ui/AppBar';
-import FlatButton              from 'material-ui/FlatButton';
 import EarthquakeList          from './EarthquakeList';
 import UserSelection           from './UserSelection';
 import { getQuakes, getCity }  from '../services/earthquakes';
 import SearchBar               from 'material-ui-search-bar';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class Home extends Component {
   constructor(props) {
@@ -61,31 +58,24 @@ class Home extends Component {
   }
 
   render() {
+    const { magnitude, radius, city, earthquakes } = this.state;
     return(
       <div>
-        <AppBar
-          title="Earthquaky"
-          style={{ backgroundColor: '#0aadd1' }}
-          showMenuIconButton={false}
-          iconElementRight={<FlatButton label="Account" />}
-        />
-
-        <SearchBar
-          onChange={(val) => this.setState({ city: val })}
-          onRequestSearch={ this.searchCity }
-          hintText="Search City: Tokyo, Berlin..."
-        />
-
         <div className="top-section">
-          <UserSelection
-            magnitude={this.state.magnitude}
-            radius={this.state.radius}
-            handler={this.handler}
-          />
-          <h2>({this.state.earthquakes.length}) earthquakes near:</h2>
-          <h2>{this.state.city}</h2>
+          <UserSelection magnitude={magnitude} radius={radius} handler={this.handler} />
+          <h2>({earthquakes.length}) earthquakes near:</h2>
+          <h2>{city}</h2>
         </div>
-        <EarthquakeList list={this.state.earthquakes}/>
+
+        <div className="search-bar">
+          <SearchBar
+            onChange={(val) => this.setState({ city: val })}
+            onRequestSearch={ this.searchCity }
+            hintText="Search City: Tokyo, Berlin..."
+          />
+        </div>
+
+        <EarthquakeList list={earthquakes}/>
       </div>
     )
   }

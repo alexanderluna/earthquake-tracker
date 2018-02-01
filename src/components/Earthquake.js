@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import {Card, CardHeader }  from 'material-ui/Card';
+import RaisedButton         from 'material-ui/RaisedButton';
 import EarthquakeMap        from './EarthquakeMap';
 import Avatar               from 'material-ui/Avatar';
 import { GoogleApiWrapper } from 'google-maps-react'
-import usgs                 from '../usgs.png'
+import { Link }             from 'react-router-dom';
+import Details              from './Details';
+import usgs                 from '../usgs.png';
 
 class Earthquake extends Component {
 
@@ -15,13 +18,21 @@ class Earthquake extends Component {
     const { google, quake } = this.props;
     return(
       <Card className="card">
-        <a className="header-link" target="_blank" href={ quake.properties.url }>
-          <CardHeader
-            title={ quake.properties.title }
-            subtitle={ this.formatDate(new Date(quake.properties.time)) }
-            avatar={ <Avatar src={ usgs } alt="usgs icon"/>} />
-        </a>
+        <CardHeader
+          title={ quake.properties.title }
+          subtitle={ this.formatDate(new Date(quake.properties.time)) }
+          avatar={ <Avatar src={ usgs } alt="usgs icon"/>} />
         <EarthquakeMap google={ google } quake={ quake }/>
+        { this.props.detail
+          ? <Details quake={quake}/>
+          : <RaisedButton
+            containerElement={<Link to={`/quake/${quake.id}`}/>}
+            label="Read More"
+            secondary={true}
+            fullWidth={true}
+            />
+        }
+
       </Card>
     )
   }
