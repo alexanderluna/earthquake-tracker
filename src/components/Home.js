@@ -1,12 +1,12 @@
-import React          from 'react';
-import { Component }  from 'react';
-import AppBar         from 'material-ui/AppBar';
-import FlatButton     from 'material-ui/FlatButton';
-import EarthquakeList from './EarthquakeList';
-import UserSelection  from './UserSelection';
-import { getQuakes }  from '../services/earthquakes';
-import { getCity   }  from '../services/earthquakes';
-import SearchBar      from 'material-ui-search-bar'
+import React                   from 'react';
+import { Component }           from 'react';
+import AppBar                  from 'material-ui/AppBar';
+import FlatButton              from 'material-ui/FlatButton';
+import EarthquakeList          from './EarthquakeList';
+import UserSelection           from './UserSelection';
+import { getQuakes, getCity }  from '../services/earthquakes';
+import SearchBar               from 'material-ui-search-bar';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class Home extends Component {
   constructor(props) {
@@ -19,7 +19,6 @@ class Home extends Component {
       lat: 35,
       city: "Tokyo, Japan"
     }
-
     this.handler      = this.handler.bind(this);
     this.searchCity   = this.searchCity.bind(this);
     this.fetchAPI     = this.fetchAPI.bind(this);
@@ -40,8 +39,7 @@ class Home extends Component {
         lon: results.geometry.location.lng,
         lat: results.geometry.location.lat,
         city: results.formatted_address
-      }, () => {
-        this.fetchAPI({
+      }, () => {this.fetchAPI({
           lat: results.geometry.location.lat,
           lon: results.geometry.location.lng
         })
@@ -66,14 +64,13 @@ class Home extends Component {
     return(
       <div>
         <AppBar
-          title="Earthquake"
+          title="Earthquaky"
           style={{ backgroundColor: '#0aadd1' }}
           showMenuIconButton={false}
           iconElementRight={<FlatButton label="Account" />}
         />
 
         <SearchBar
-          ref="search"
           onChange={(val) => this.setState({ city: val })}
           onRequestSearch={ this.searchCity }
           hintText="Search City: Tokyo, Berlin..."

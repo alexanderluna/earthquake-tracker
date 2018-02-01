@@ -12,7 +12,7 @@ export default class UserSelection extends Component {
           className="select-field"
           floatingLabelText="Radius"
           value={radius}
-          onChange={this.props.handler}
+          onChange={handler}
           autoWidth={true}
         >
           <MenuItem value={50} primaryText="50 KM" />
@@ -28,7 +28,7 @@ export default class UserSelection extends Component {
           className="select-field"
           floatingLabelText="Magnitude"
           value={magnitude}
-          onChange={this.props.handler}
+          onChange={handler}
           autoWidth={true}
         >
           <MenuItem value={2} primaryText="mag 2+" />
