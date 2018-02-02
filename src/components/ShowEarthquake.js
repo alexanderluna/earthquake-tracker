@@ -22,7 +22,7 @@ export default class ShowEarthquake extends Component {
       <div className="quake-list">
         { this.state.loading
           ? <h1>Loading...</h1>
-          : <Earthquake quake={this.state.quake} detail={true} />
+          : <Earthquake quake={this.state.quake} detail={true} shareLink={this.props.location.pathname} />
         }
       </div>
     )

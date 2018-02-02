@@ -24,7 +24,7 @@ class Earthquake extends Component {
           avatar={ <Avatar src={ usgs } alt="usgs icon"/>} />
         <EarthquakeMap google={ google } quake={ quake }/>
         { this.props.detail
-          ? <Details quake={quake}/>
+          ? <Details quake={quake} shareLink={this.props.shareLink}/>
           : <RaisedButton
             containerElement={<Link to={`/quake/${quake.id}`}/>}
             label="Read More"

@@ -1,3 +1,8 @@
+a {
+  color: white;
+  text-decoration: none;
+}
+
 .app-bar {
   background-color: #0aadd1 !important;
 }
@@ -26,6 +31,10 @@
 
 .top-section h2 {
   color: #0aadd1;
+}
+
+.share-btn {
+  display: inline-block;
 }
 
 @media screen and (min-width: 750px) {
