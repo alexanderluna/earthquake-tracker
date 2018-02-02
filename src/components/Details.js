@@ -7,7 +7,7 @@ const Details = (props) => (
   <div>
     <CardActions>
       <RaisedButton
-        label={<a href={`https://twitter.com/intent/tweet?via=mr_moon95&text=Earthquake ${props.quake.properties.title} but I am fine&url=https://earthquake-ticker.firebaseapp.com${props.shareLink}`}>Tweet I'm safe</a>}
+        label={<a href={`https://twitter.com/intent/tweet?via=mr_moon95&text=Earthquake ${props.quake.properties.title} but I am safe&url=https://earthquake-ticker.firebaseapp.com${props.shareLink}`}>Tweet I'm safe</a>}
         secondary={true}
         fullWidth={true} />
     </CardActions>
@@ -73,7 +73,7 @@ const Details = (props) => (
           <TableRow>
             <TableRowColumn>Tsunami</TableRowColumn>
             <TableRowColumn>
-              { props.quake.properties.tsunami == 0 ? "0" : "unpublished information"}
+              { props.quake.properties.tsunami === 0 ? "0" : "unpublished information"}
             </TableRowColumn>
           </TableRow>
 
