@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import flag from '../flag.png'
 
-
 export default class EarthquakeMap extends Component {
   componentDidUpdate(prevProps, prevState) {
     this.loadMap();
@@ -32,9 +31,7 @@ export default class EarthquakeMap extends Component {
         position: {lat: quake.geometry.coordinates[1], lng: quake.geometry.coordinates[0]},
         map: this.map,
         title: quake.properties.title,
-        icon: {
-          url: `${ flag }`
-        }
+        icon: { url: `${ flag }` }
       });
 
       const infowindow = new google.maps.InfoWindow({

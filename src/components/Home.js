@@ -1,6 +1,6 @@
 import React                   from 'react';
 import { Component }           from 'react';
-import EarthquakeList          from './EarthquakeList';
+import Earthquake              from './Earthquake';
 import UserSelection           from './UserSelection';
 import { getQuakes, getCity }  from '../services/earthquakes';
 import SearchBar               from 'material-ui-search-bar';
@@ -51,7 +51,7 @@ class Home extends Component {
     const lon = query.lon || this.state.lon;
     getQuakes({mag: mag, rad: rad, lat: lat, lon: lon})
     .then(json => this.setState({
-      earthquakes: json.features.slice(0,7),
+      earthquakes: json.features.slice(0,10),
       radius: rad,
       magnitude: mag
     }))
@@ -63,8 +63,7 @@ class Home extends Component {
       <div>
         <div className="top-section">
           <UserSelection magnitude={magnitude} radius={radius} handler={this.handler} />
-          <h2>({earthquakes.length}) earthquakes near:</h2>
-          <h2>{city}</h2>
+          <h2>({earthquakes.length}) earthquakes near:<br/><br/>{city}</h2>
         </div>
 
         <div className="search-bar">
@@ -75,7 +74,11 @@ class Home extends Component {
           />
         </div>
 
-        <EarthquakeList list={earthquakes}/>
+        <div className="quake-list">
+          { this.state.earthquakes.map((earthquake, i) =>
+            <Earthquake key={i} quake={earthquake} />)
+          }
+        </div>
       </div>
     )
   }
