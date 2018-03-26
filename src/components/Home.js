@@ -22,12 +22,12 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.fetchAPI({});
+    this.fetchAPI();
   }
 
   handler(event, index, value) {
-    if (value < 10) { this.fetchAPI({mag: value}) };
-    if (value > 10) { this.fetchAPI({rad: value}) };
+		if (value < 10) { this.setState({magnitude: value}, () => this.fetchAPI() )}
+		if (value > 10) { this.setState({radius: value}, () => this.fetchAPI() )}
   }
 
   searchCity() {
@@ -36,24 +36,15 @@ class Home extends Component {
         lon: results.geometry.location.lng,
         lat: results.geometry.location.lat,
         city: results.formatted_address
-      }, () => {this.fetchAPI({
-          lat: results.geometry.location.lat,
-          lon: results.geometry.location.lng
-        })
-      })
+      }, () => {this.fetchAPI()})
     )
   }
 
-  fetchAPI(query) {
-    const mag = query.mag || this.state.magnitude;
-    const rad = query.rad || this.state.radius;
-    const lat = query.lat || this.state.lat;
-    const lon = query.lon || this.state.lon;
-    getQuakes({mag: mag, rad: rad, lat: lat, lon: lon})
+  fetchAPI() {
+		const { lat, lon, magnitude, radius } = this.state;
+    getQuakes({mag: magnitude, rad: radius, lat: lat, lon: lon})
     .then(json => this.setState({
       earthquakes: json.features.slice(0,10),
-      radius: rad,
-      magnitude: mag
     }))
   }
 
@@ -75,7 +66,7 @@ class Home extends Component {
         </div>
 
         <div className="quake-list">
-          { this.state.earthquakes.map((earthquake, i) =>
+          { earthquakes.map((earthquake, i) =>
             <Earthquake key={i} quake={earthquake} />)
           }
         </div>
