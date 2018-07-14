@@ -1,6 +1,6 @@
 # Earthquake Tracker Project
 
-**Live version available at: [https://earthquake-ticker.firebaseapp.com](https://earthquake-ticker.firebaseapp.com)
+**Live version available at:** [https://earthquake-ticker.firebaseapp.com](https://earthquake-ticker.firebaseapp.com)
 
 A react project that tracks earthquakes around the world using the [USGS GeoJSON API](https://earthquake.usgs.gov/fdsnws/event/1/). It allows you to search for earthquakes in your area and filter by magnitude and radius.
 
