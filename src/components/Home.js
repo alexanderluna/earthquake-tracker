@@ -1,78 +1,82 @@
-import React                   from 'react';
-import { Component }           from 'react';
-import Earthquake              from './Earthquake';
-import UserSelection           from './UserSelection';
-import { getQuakes, getCity }  from '../services/earthquakes';
-import SearchBar               from 'material-ui-search-bar';
+import React, { Component } from 'react';
+import Earthquake from './earthquake/Earthquake';
+import UserSelection from './partials/UserSelection';
+import SearchField from './partials/SearchField';
+import { getQuakes, getCity } from '../services/earthquakes';
 
 class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      earthquakes: [],
-      radius: 2000,
-      magnitude: 2,
-      lon: 139,
-      lat: 35,
-      city: "Tokyo, Japan"
-    }
-    this.handler      = this.handler.bind(this);
-    this.searchCity   = this.searchCity.bind(this);
-    this.fetchAPI     = this.fetchAPI.bind(this);
-  }
+  state = {
+    earthquakes: [],
+    radius: 2000,
+    magnitude: 2,
+    lon: 139,
+    lat: 35,
+    city: 'Tokyo, Japan',
+  };
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchAPI();
   }
 
-  handler(event, index, value) {
-		if (value < 10) { this.setState({magnitude: value}, () => this.fetchAPI() )}
-		if (value > 10) { this.setState({radius: value}, () => this.fetchAPI() )}
+  handler = ({ target: { name, value } }) => {
+    this.setState({ [name]: value }, () => this.fetchAPI());
   }
 
-  searchCity() {
-    getCity(this.state.city)
-    .then(results => this.setState({
-        lon: results.geometry.location.lng,
-        lat: results.geometry.location.lat,
-        city: results.formatted_address
-      }, () => {this.fetchAPI()})
-    )
+  onSearch = name => (event) => {
+    this.setState({ [name]: event.target.value });
   }
 
-  fetchAPI() {
-		const { lat, lon, magnitude, radius } = this.state;
-    getQuakes({mag: magnitude, rad: radius, lat: lat, lon: lon})
-    .then(json => this.setState({
-      earthquakes: json.features.slice(0,10),
-    }))
+  searchCity = (city) => {
+    getCity(city)
+      .then((results) => {
+        this.setState({
+          lon: results.geometry.location.lng,
+          lat: results.geometry.location.lat,
+          city: results.formatted_address,
+        }, () => { this.fetchAPI(); });
+      })
+      .catch(err => console.log(err));
+  }
+
+  fetchAPI = () => {
+    const {
+      lat, lon, magnitude, radius,
+    } = this.state;
+    getQuakes({
+      mag: magnitude, rad: radius, lat, lon,
+    })
+      .then(json => this.setState({
+        earthquakes: json.features.slice(0, 10),
+      }));
   }
 
   render() {
-    const { magnitude, radius, city, earthquakes } = this.state;
-    return(
+    const {
+      magnitude, radius, earthquakes, city,
+    } = this.state;
+    return (
       <div>
         <div className="top-section">
-          <UserSelection magnitude={magnitude} radius={radius} handler={this.handler} />
-          <h2>({earthquakes.length}) earthquakes near:<br/><br/>{city}</h2>
+          <UserSelection
+            magnitude={magnitude}
+            radius={radius}
+            handler={this.handler}
+          />
+          <h2>
+            ({earthquakes.length}) earthquakes near:<br /><br />{city}
+          </h2>
         </div>
 
-        <div className="search-bar">
-          <SearchBar
-            onChange={(val) => this.setState({ city: val })}
-            onRequestSearch={ this.searchCity }
-            hintText="Search City: Tokyo, Berlin..."
-          />
-        </div>
+        <SearchField defaultSearch={city} searchCity={this.searchCity} />
 
         <div className="quake-list">
-          { earthquakes.map((earthquake, i) =>
-            <Earthquake key={i} quake={earthquake} />)
-          }
+          {earthquakes.map(earthquake => (
+            <Earthquake key={earthquake.id} quake={earthquake} />
+          ))}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Home
+export default Home;
