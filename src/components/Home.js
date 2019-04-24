@@ -34,8 +34,7 @@ class Home extends Component {
           lat: results.geometry.location.lat,
           city: results.formatted_address,
         }, () => { this.fetchAPI(); });
-      })
-      .catch(err => console.log(err));
+      });
   }
 
   fetchAPI = () => {
@@ -62,9 +61,8 @@ class Home extends Component {
             radius={radius}
             handler={this.handler}
           />
-          <h2>
-            ({earthquakes.length}) earthquakes near:<br /><br />{city}
-          </h2>
+          <h2>{`${earthquakes.length} earthquakes near:`}</h2>
+          <h2>{city}</h2>
         </div>
 
         <SearchField defaultSearch={city} searchCity={this.searchCity} />
