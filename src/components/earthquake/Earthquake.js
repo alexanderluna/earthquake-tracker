@@ -24,13 +24,13 @@ class Earthquake extends Component {
           subtitle={this.formatDate(new Date(quake.properties.time))}
           avatar={<Avatar src={usgs} alt="usgs icon" />}
         />
-        <EarthquakeMap google={google} quake={quake} />
-        {this.props.detail && <Details quake={quake} shareLink={shareLink} />}
+        <EarthquakeMap google={google} {...quake} />
+        {this.props.detail && <Details {...quake} shareLink={shareLink} />}
         {!this.props.detail && (
           <Button
+            fullWidth
             to={`/quake/${quake.id}`}
             color="secondary"
-            fullWidth
             component={this.AdapterLink}
           >
             Read More
