@@ -3,7 +3,7 @@ import {
   Button, CardActions, Table, TableBody, TableCell, TableHead, TableRow, Paper,
 } from '@material-ui/core';
 
-const Details = ({ shareLink, quake: { properties } }) => {
+const Details = ({ shareLink, properties }) => {
   const rows = [
     { name: 'Location', value: properties.place },
     { name: 'Magnitude', value: properties.mag },
