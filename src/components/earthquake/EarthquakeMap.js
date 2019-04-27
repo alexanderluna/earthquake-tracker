@@ -8,7 +8,7 @@ export default class EarthquakeMap extends Component {
   }
 
   loadMap() {
-    const { quake: { geometry, properties } } = this.props;
+    const { geometry, properties } = this.props;
     if (this.props && this.props.google) {
       const { google } = this.props;
       const maps = google.maps;
@@ -43,7 +43,7 @@ export default class EarthquakeMap extends Component {
         content: `<h3>${properties.title}</h3>
         <h4>${(new Date(properties.time)).toDateString()}
         at depth of ${geometry.coordinates[2]} km</h4>
-        <a href=${properties.url} target="_blank">More Info</a>`
+        <a href=${properties.url} target="_blank">More Info</a>`,
       });
       marker.addListener('click', () => {
         infowindow.open(this.map, marker);
