@@ -4,7 +4,7 @@ import { GoogleApiWrapper } from 'google-maps-react';
 import { Link as RouterLink } from 'react-router-dom';
 import EarthquakeMap from './EarthquakeMap';
 import Details from './Details';
-import usgs from '../../usgs.png';
+import usgs from '../../assets/usgs.png';
 
 class Earthquake extends Component {
   AdapterLink = React.forwardRef((props, ref) => (

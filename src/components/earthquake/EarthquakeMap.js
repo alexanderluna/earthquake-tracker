@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import flag from '../../flag.png';
+import flag from '../../assets/flag.png';
 
 export default class EarthquakeMap extends Component {
   componentDidUpdate() {
