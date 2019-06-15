@@ -20,6 +20,7 @@ a {
 
 .select-field {
     margin: 2rem;
+    display: inline-block;
 }
 
 .mapView {
@@ -50,7 +51,7 @@ a {
 
     .quake-list {
         width: 60%;
-        margin: auto;
+        margin: 5rem auto;
     }
 
     .mapView {
@@ -71,7 +72,7 @@ a {
 
     .quake-list {
         width: 80%;
-        margin: auto;
+        margin: 5rem auto;
     }
 
     .mapView {
