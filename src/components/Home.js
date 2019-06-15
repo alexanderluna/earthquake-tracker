@@ -34,7 +34,8 @@ class Home extends Component {
           lat: results.geometry.location.lat,
           city: results.formatted_address,
         }, () => { this.fetchAPI(); });
-      });
+      })
+      .catch(err => console.log(err));
   }
 
   fetchAPI = () => {
