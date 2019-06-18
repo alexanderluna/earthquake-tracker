@@ -8,7 +8,7 @@ export function getQuakes(query) {
 
 
 export function getCity(city) {
-  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=AIzaSyChZPizXo_3sk70Cm4yveOd0YfQtuxc7As`)
+  return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=AIzaSyDccQUzQ1B1TjwCLDCRJXU32s3OWGqFntI`)
     .then(res => res.json())
     .then(json => json.results[0]);
 }
